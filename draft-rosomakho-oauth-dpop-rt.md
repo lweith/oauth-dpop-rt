@@ -9,19 +9,19 @@ number:
 date:
 consensus: true
 v: 3
-area: sec
-workgroup: oauth
+area: "Security"
+workgroup: "Web Authorization Protocol"
 keyword:
  - DPoP
  - refresh token
  - separation
 venue:
-  group: oauth
-  type: Working Group
-  mail: oauth@ietf.org
-  arch: https://mailarchive.ietf.org/arch/browse/oauth/
-  github: yaroslavros/oauth-dpop-rt
-  latest: https://yaroslavros.github.io/oauth-dpop-rt/draft-rosomakho-oauth-dpop-rt.html
+  group: "Web Authorization Protocol"
+  type: "Working Group"
+  mail: "oauth@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/oauth/"
+  github: "yaroslavros/oauth-dpop-rt"
+  latest: "https://yaroslavros.github.io/oauth-dpop-rt/draft-rosomakho-oauth-dpop-rt.html"
 
 author:
  -
@@ -32,7 +32,7 @@ author:
     fullname: Loren Weith
     organization: Zscaler
     email: lweith@zscaler.com
-    
+
 
 normative:
 
