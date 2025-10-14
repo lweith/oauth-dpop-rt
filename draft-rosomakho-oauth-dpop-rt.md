@@ -43,6 +43,8 @@ informative:
 
 This document defines an extension to OAuth 2.0 Demonstrating Proof-of-Possession at the application level (DPoP, RFC 9449) that allows refresh tokens to be bound to a different proof-of-possession key than access tokens. In the existing specification, a single DPoP proof is used to bind both tokens to the same key material. However, in many deployments, refresh tokens and access tokens are stored and managed in different security contexts. To support this operational separation, this document introduces a new HTTP header field, DPoP-RT, and corresponding DPoP-RT-Nonce mechanism, enabling independent proof-of-possession for refresh token use while preserving compatibility with existing DPoP-bound access tokens.
 
+A motivating scenario for this extension is an agent managing numerous long-lived tokens on behalf of its users, where user participation is often required for revocation. When combined with a hardware security module (HSM), DPoP allows use of a refresh token to be halted immediately by disabling the associated key material. The token remains valid but unusable until the key is reactivated. In large, distributed systems with many worker nodes, however, involving an HSM in every transaction is operationally impractical, motivating this extension.
+
 
 --- middle
 
@@ -58,7 +60,7 @@ This separation allows deployments to:
 
 - Isolate long-term refresh token credentials from short-lived access token keys
 - Rotate or revoke access token keys without affecting the refresh token flow
-- Reduce the blast radius of a key compromise
+- Reduce the blast radius of access token key compromise
 
 The extension is fully backward compatible with {{DPoP}} as clients and authorization servers that do not implement this specification continue to operate unchanged, while those that support DPoP-RT can negotiate its use on a per-client basis.
 
@@ -347,7 +349,7 @@ Using distinct keys for access and refresh tokens limits the impact of key compr
 - If the access token key is compromised, an attacker can invoke protected APIs until the access token expires but cannot obtain new tokens.
 - If the refresh token key is compromised, an attacker can redeem the refresh token and obtain new access tokens, binding them to an attacker-controlled access token key. Separation merely forces AS interaction.
 
-Implementers SHOULD store the refresh-token key in a hardened or server-side environment and allow the access-token key to reside in a more transient context such as a front-end instance or mobile device. Key separation materially reduces the blast radius of access token key compromise but does not reduce the impact of a full refresh token key compromise.
+Implementers SHOULD store the refresh-token key in an HSM or hardened server-side environment and MAY allow the access-token key to reside in a more transient context such as a front-end instance or mobile device. Key separation materially reduces the blast radius of access token key compromise but does not reduce the impact of a full refresh token key compromise.
 
 ## Replay Protection and Nonces
 
