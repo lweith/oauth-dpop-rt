@@ -156,7 +156,7 @@ The AS MUST NOT infer the new access token key from any previously issued tokens
 
 If the DPoP header is absent, the AS MUST NOT issue a DPoP-bound access token. It MAY issue an unbound (bearer) access token only if explicitly permitted by policy or by the client registration metadata (e.g., when `dpop_bound_access_tokens` is false). Otherwise, the request MUST be rejected according to the rules in {{DPoP}}.
 
-If the DPoP-RT header is absent or invalid and the client is registered with `drop_bound_refresh_tokens` set to true, the AS MUST reject the request using the `invalid_dpop_rt_proof` error.
+If the DPoP-RT header is absent or invalid and the client is registered with `dpop_bound_refresh_tokens` set to true, the AS MUST reject the request using the `invalid_dpop_rt_proof` error.
 
 ## Example Requests
 
@@ -320,7 +320,7 @@ The DPoP-RT-Nonce mechanism operates independently from the DPoP-Nonce defined i
 
 # Client Registration Metadata
 
-This specification introduces a new boolean client registration metadata parameter named `drop_bound_refresh_tokens`.
+This specification introduces a new boolean client registration metadata parameter named `dpop_bound_refresh_tokens`.
 
 With `true` value of this parameter client indicates that its refresh tokens are always bound to a proof-of-possession key, as demonstrated by a DPoP-RT proof, and that the AS MUST enforce the use of such proofs whenever a refresh token is presented.
 
@@ -328,13 +328,13 @@ This parameter can be supplied during client registration {{?OAUTH-DYNAMIC=RFC75
 
 ## Server Enforcement
 
-If a client is registered with drop_bound_refresh_tokens = true, the AS MUST:
+If a client is registered with dpop_bound_refresh_tokens = true, the AS MUST:
 
 1. Reject any request using a refresh token that does not contain a valid DPoP-RT header. The AS MUST return the `invalid_dpop_rt_proof` error when a proof is malformed, invalid, or fails validation. The AS MUST return `use_dpop_rt_nonce` when a fresh proof with a valid nonce is required.
 1. Bind all refresh tokens issued to that client to the key demonstrated by the corresponding DPoP-RT proof at issuance time.
 1. AS MUST reject unbound refresh token use including refresh token previously issued without binding information (for example, before registration or migration).
 
-If a client is registered with drop_bound_refresh_tokens = false or the parameter is omitted, the AS MAY treat DPoP-RT as optional and continue to follow the behavior defined in {{DPoP}}.
+If a client is registered with dpop_bound_refresh_tokens = false or the parameter is omitted, the AS MAY treat DPoP-RT as optional and continue to follow the behavior defined in {{DPoP}}.
 
 # Security Considerations
 
@@ -402,7 +402,7 @@ use_dpop_rt_nonce:
 
 IANA is requested to register the following value in the IANA "OAuth Dynamic Client Registration Metadata" registry:
 
-- Client Metadata Name: drop_bound_refresh_tokens
+- Client Metadata Name: dpop_bound_refresh_tokens
 - Client Metadata Description: Boolean value specifying whether the client always uses DPoP-RT for refresh token requests
 - Change Controller: IETF
 - Reference: This document
